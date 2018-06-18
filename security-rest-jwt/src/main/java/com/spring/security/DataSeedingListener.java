@@ -34,19 +34,19 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 		String adminRoleName = RoleEnum.ADMIN.getRole();
 		String memberRoleName = RoleEnum.MEMBER.getRole();
 
-		Role adminRole = roleRepository.findByName(adminRoleName);
-		Role memberRole = roleRepository.findByName(memberRoleName);
-
-		if (Objects.isNull(adminRole)) {
+		if (!roleRepository.existsByName(adminRoleName)) {
 			roleRepository.save(new Role(adminRoleName));
 		}
 
-		if (Objects.isNull(adminRole)) {
+		if (!roleRepository.existsByName(memberRoleName)) {
 			roleRepository.save(new Role(memberRoleName));
 		}
 
+		Role adminRole = roleRepository.findByName(adminRoleName);
+		Role memberRole = roleRepository.findByName(memberRoleName);
+
 		// init users
-		if (Objects.isNull(adminRole) && Objects.isNull(memberRole)) {
+		if (!Objects.isNull(adminRole) && !Objects.isNull(memberRole)) {
 			if (!userRepository.existsByUsername("admin")) {
 				User user = new User("admin", passwordEncoder.encode("admin"), "admin@gmail.com");
 				user.setRoles(new HashSet<>(Arrays.asList(adminRole, memberRole)));

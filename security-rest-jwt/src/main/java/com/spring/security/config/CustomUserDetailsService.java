@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.security.entity.User;
+import com.spring.security.exception.NotFoundException;
 import com.spring.security.repository.UserRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserById(Long id) {
 		User user = userRepository.findOne(id);
 		if (Objects.isNull(user)) {
-			throw new UsernameNotFoundException("User not found with id: " + id);
+			throw new NotFoundException("User", "id", id);
 		}
 		return UserPrincipal.create(user);
 	}

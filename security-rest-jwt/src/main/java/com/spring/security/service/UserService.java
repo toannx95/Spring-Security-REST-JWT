@@ -6,6 +6,10 @@ import com.spring.security.entity.User;
 
 public interface UserService {
 
-	List<User> getAlls();
+	List<User> getAllUsers();
+
+	User getUser(Long id);
+	
+	User getUser(String username);
 
 }
