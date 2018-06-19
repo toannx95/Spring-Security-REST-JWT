@@ -1,15 +1,16 @@
 package com.spring.security.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.spring.security.entity.User;
 
 public interface UserService {
 
-	List<User> getAllUsers();
+	Page<User> getAllUsers(Pageable pageable);
 
 	User getUser(Long id);
-	
+
 	User getUser(String username);
 
 }
