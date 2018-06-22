@@ -1,11 +1,11 @@
 package com.spring.security.dto;
 
-public class ApiResponse {
+public class ApiResponseDto {
 
 	private Boolean success;
 	private String message;
 
-	public ApiResponse(Boolean success, String message) {
+	public ApiResponseDto(Boolean success, String message) {
 		this.success = success;
 		this.message = message;
 	}

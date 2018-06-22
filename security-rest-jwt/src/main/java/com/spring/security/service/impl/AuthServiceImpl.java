@@ -4,16 +4,10 @@ import java.util.Collections;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.spring.security.config.JwtTokenProvider;
-import com.spring.security.dto.LoginRequest;
-import com.spring.security.dto.SignUpRequest;
+import com.spring.security.dto.SignUpDto;
 import com.spring.security.entity.Role;
 import com.spring.security.entity.User;
 import com.spring.security.enumeration.RoleEnum;
@@ -27,9 +21,6 @@ import com.spring.security.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
 	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
@@ -38,21 +29,8 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private JwtTokenProvider tokenProvider;
-
 	@Override
-	public String authenticateUser(LoginRequest loginRequest) {
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		return tokenProvider.generateToken(authentication);
-	}
-
-	@Override
-	public User registerUser(SignUpRequest signUpRequest) {
+	public User registerUser(SignUpDto signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			throw new BadRequestException("Username is already taken!");
 		}
@@ -72,6 +50,17 @@ public class AuthServiceImpl implements AuthService {
 		user.setRoles(Collections.singleton(memberRole));
 
 		return userRepository.save(user);
+	}
+
+	@Override
+	public boolean checkIfValidOldPassword(User user, String oldPassword) {
+		return passwordEncoder.matches(oldPassword, user.getPassword());
+	}
+
+	@Override
+	public void changeUserPassword(User user, String password) {
+		user.setPassword(passwordEncoder.encode(password));
+		userRepository.save(user);
 	}
 
 }

@@ -1,11 +1,11 @@
 package com.spring.security.dto;
 
-public class JwtAuthenticationResponse {
+public class JwtAuthResponseDto {
 
 	private String tokenType = "Bearer";
 	private String accessToken;
 
-	public JwtAuthenticationResponse(String accessToken) {
+	public JwtAuthResponseDto(String accessToken) {
 		this.accessToken = accessToken;
 	}
 

@@ -5,7 +5,7 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class SignUpRequest {
+public class SignUpDto {
 
 	@NotBlank
 	@Size(min = 3, max = 15)
